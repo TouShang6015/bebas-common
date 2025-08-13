@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * spring工具类
- * @author wuhao
+ * @author WuHao
  */
 @Component
 public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationContextAware {

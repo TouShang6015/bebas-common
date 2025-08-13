@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * @author WuYuanJun
+ * @author WuHao
  * @description: model 查询参数构建
- * @date 2023/4/1$ 14:21$
+ * @since 2023/4/1$ 14:21$
  * @Version 1.0
  */
 public class QueryConditionFastLambda<M extends BaseModel> {

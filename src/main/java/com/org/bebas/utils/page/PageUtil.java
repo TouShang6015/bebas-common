@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * @author Wuhao
- * @date 2022/7/25 17:34
+ * @author WuHao
+ * @since 2022/7/25 17:34
  */
 public class PageUtil {
 

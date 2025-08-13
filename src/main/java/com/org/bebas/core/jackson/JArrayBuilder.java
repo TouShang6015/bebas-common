@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author wyj
- * @date 2022/11/18 16:10
+ * @author WuHao
+ * @since 2022/11/18 16:10
  */
 public class JArrayBuilder extends AbstractJSONUtil<JArrayBuilder> {
 

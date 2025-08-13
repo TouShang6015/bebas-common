@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 /**
  * 树构建工具类
  *
- * @author wyj
- * @date 2023/3/23 15:50
+ * @author WuHao
+ * @since 2023/3/23 15:50
  */
 public class TreeUtil<Model, TM extends TreeEntity<TM>> {
 

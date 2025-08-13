@@ -3,8 +3,8 @@ package com.org.bebas.core.model.convert;
 import java.util.List;
 
 /**
- * @author wyj
- * @date 2023/3/24 10:29
+ * @author WuHao
+ * @since 2023/3/24 10:29
  */
 public interface BaseConvert<Model, DTO> {
 

@@ -19,7 +19,7 @@ import java.util.Map;
  * 公共实体model
  *
  * @author WuHao
- * @date 2022/5/12 10:55
+ * @since 2022/5/12 10:55
  */
 @Data
 @AllArgsConstructor

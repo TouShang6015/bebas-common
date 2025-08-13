@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * @author WuHao
- * @date 2022/5/12 16:58
+ * @since 2022/5/12 16:58
  */
 public interface CharsetConstant {
 

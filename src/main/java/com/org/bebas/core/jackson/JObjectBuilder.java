@@ -6,8 +6,8 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 
 /**
- * @author wyj
- * @date 2022/11/18 16:10
+ * @author WuHao
+ * @since 2022/11/18 16:10
  */
 public class JObjectBuilder extends AbstractJSONUtil<JObjectBuilder> {
 

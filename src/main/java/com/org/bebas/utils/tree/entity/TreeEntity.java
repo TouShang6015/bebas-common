@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author wyj
- * @date 2023/3/23 16:53
+ * @author WuHao
+ * @since 2023/3/23 16:53
  */
 @Data
 public class TreeEntity<M> {

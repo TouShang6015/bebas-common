@@ -3,4 +3,4 @@ com.org.bebas.config.global.IdGenerateConfig
 com.org.bebas.config.global.FutureUtilConfig
 com.org.bebas.core.redis.RedisUtil
 com.org.bebas.core.spring.SpringUtils
-com.org.bebas.core.serialNumber.SerialNoGenerate
+com.org.bebas.core.serialNumber.SerialNoGenerate2

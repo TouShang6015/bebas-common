@@ -13,9 +13,9 @@ import java.util.Optional;
 import static com.org.bebas.constants.Constants.DEFAULT_IN_PARAM;
 
 /**
- * @author WuYuanJun
+ * @author WuHao
  * @description: model 查询参数构建
- * @date 2023/4/1$ 14:21$
+ * @since 2023/4/1$ 14:21$
  * @Version 1.0
  */
 public class QueryConditionFast<M extends BaseModel> {

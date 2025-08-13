@@ -2,7 +2,7 @@ package com.org.bebas.enums;
 
 /**
  * @author WuHao
- * @date 2022/5/17 13:28
+ * @since 2022/5/17 13:28
  */
 public enum ConditionEnum {
 

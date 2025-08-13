@@ -1,8 +1,8 @@
 package com.org.bebas.core.jackson;
 
 /**
- * @author wyj
- * @date 2022/11/18 15:42
+ * @author WuHao
+ * @since 2022/11/18 15:42
  */
 public class JSON {
 

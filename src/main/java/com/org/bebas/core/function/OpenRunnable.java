@@ -7,7 +7,7 @@ import java.util.function.Predicate;
  * Runnable 增强类
  *
  * @author WuHao
- * @date 2022/5/21 10:52
+ * @since 2022/5/21 10:52
  */
 public class OpenRunnable {
 

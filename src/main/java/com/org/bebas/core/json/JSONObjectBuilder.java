@@ -3,8 +3,8 @@ package com.org.bebas.core.json;
 import com.alibaba.fastjson2.JSONObject;
 
 /**
- * @author Wuhao
- * @date 2022/8/28 15:12
+ * @author WuHao
+ * @since 2022/8/28 15:12
  */
 public class JSONObjectBuilder {
 

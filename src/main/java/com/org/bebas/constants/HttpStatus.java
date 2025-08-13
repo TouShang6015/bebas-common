@@ -3,7 +3,7 @@ package com.org.bebas.constants;
 /**
  * 响应码常量类
  * @author WuHao
- * @date 2022/5/22 21:32
+ * @since 2022/5/22 21:32
  */
 public interface HttpStatus {
 

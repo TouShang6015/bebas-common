@@ -15,8 +15,8 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * @author wyj
- * @date 2022/11/18 16:13
+ * @author WuHao
+ * @since 2022/11/18 16:13
  */
 public abstract class AbstractJSONUtil<B> {
 

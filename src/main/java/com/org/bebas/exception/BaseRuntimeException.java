@@ -2,7 +2,7 @@ package com.org.bebas.exception;
 
 /**
  * @author WuHao
- * @date 2022/5/13 17:39
+ * @since 2022/5/13 17:39
  */
 public class BaseRuntimeException extends RuntimeException {
 

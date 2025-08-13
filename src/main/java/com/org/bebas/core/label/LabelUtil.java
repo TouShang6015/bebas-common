@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 /**
  * 标签下拉工具类
  *
- * @author wuHao
- * @date 2022/11/11 10:57
+ * @author WuHao
+ * @since 2022/11/11 10:57
  */
 @Slf4j
 public class LabelUtil {

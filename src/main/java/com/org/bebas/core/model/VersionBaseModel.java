@@ -9,8 +9,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.Objects;
 
 /**
- * @author wyj
- * @date 2023/3/14 17:02
+ * @author WuHao
+ * @since 2023/3/14 17:02
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

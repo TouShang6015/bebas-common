@@ -6,7 +6,7 @@ import com.org.bebas.constants.HttpStatus;
 
 /**
  * @author WuHao
- * @date 2022/5/29 17:08
+ * @since 2022/5/29 17:08
  */
 public class ResultUtil {
 

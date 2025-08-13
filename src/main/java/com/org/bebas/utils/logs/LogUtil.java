@@ -11,7 +11,7 @@ import java.util.Arrays;
  * 日志工具类
  *
  * @author WuHao
- * @date 2022/5/12 15:59
+ * @since 2022/5/12 15:59
  */
 public class LogUtil {
 

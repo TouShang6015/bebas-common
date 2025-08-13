@@ -11,8 +11,8 @@ import java.util.Map;
 /**
  * 定制化序列器空值处理
  *
- * @Author wuHao
- * @Date 2022/11/18 16:52
+ * @author WuHao
+ * @since 2022/11/18 16:52
  * @Return
  */
 public class NullValueSerializer extends JsonSerializer<Object> {

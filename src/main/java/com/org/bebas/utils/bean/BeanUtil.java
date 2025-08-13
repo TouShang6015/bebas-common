@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author WuHao
- * @date 2022/5/17 23:23
+ * @since 2022/5/17 23:23
  */
 public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
 

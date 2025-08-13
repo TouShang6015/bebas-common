@@ -3,9 +3,9 @@ package com.org.bebas.config.global;
 import org.springframework.core.env.Environment;
 
 /**
- * @author WuYuanJun
+ * @author WuHao
  * @description:
- * @date 2023/4/23 13:56
+ * @since 2023/4/23 13:56
  * @Version 1.0
  */
 public interface PropertiesConfig {

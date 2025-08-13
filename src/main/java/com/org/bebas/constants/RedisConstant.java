@@ -4,7 +4,7 @@ package com.org.bebas.constants;
  * redis常量
  *
  * @author WuHao
- * @date 2022/5/13 9:46
+ * @since 2022/5/13 9:46
  */
 public interface RedisConstant {
 
