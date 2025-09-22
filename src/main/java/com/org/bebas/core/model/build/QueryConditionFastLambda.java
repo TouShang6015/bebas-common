@@ -1,20 +1,20 @@
 package com.org.bebas.core.model.build;
 
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.lang.func.Func1;
-import cn.hutool.core.lang.func.LambdaUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.org.bebas.core.model.BaseModel;
 import com.org.bebas.enums.ConditionEnum;
+import com.org.bebas.utils.bean.ReflectUtils;
+import org.springframework.util.Assert;
 
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * @author WuHao
  * @description: model 查询参数构建
- * @since 2023/4/1$ 14:21$
  * @Version 1.0
+ * @since 2023/4/1$ 14:21$
  */
 public class QueryConditionFastLambda<M extends BaseModel> {
 
@@ -28,7 +28,7 @@ public class QueryConditionFastLambda<M extends BaseModel> {
      * @return
      */
     public static synchronized <M extends BaseModel> QueryConditionFastLambda<M> build(M model) {
-        Assert.notNull(model);
+        Assert.notNull(model, "model不能为空");
         QueryConditionFastLambda<M> fastLambda = new QueryConditionFastLambda<>();
         fastLambda.setConditionFast(QueryConditionFast.<M>build(model));
         return fastLambda;
@@ -40,18 +40,20 @@ public class QueryConditionFastLambda<M extends BaseModel> {
      * @param func
      * @param value
      */
-    public QueryConditionFastLambda<M> queryConditionIn(Func1<M, Object> func, String value) {
-        Assert.notNull(func);
-        Assert.notNull(value);
-        String propName = LambdaUtil.getFieldName(func);
+    public QueryConditionFastLambda<M> queryConditionIn(Function<M, Object> func, String value) {
+        Assert.notNull(func, "func不能为空");
+        Assert.notNull(value, "value不能为空");
+
+
+        String propName = ReflectUtils.getFieldName(func);
         this.conditionFast.queryConditionIn(propName, value);
         return this;
     }
 
-    public QueryConditionFastLambda<M> queryConditionIn(Func1<M, Object> func, Collection<?> list) {
+    public QueryConditionFastLambda<M> queryConditionIn(Function<M, Object> func, Collection<?> list) {
         Assert.notNull(func);
         Assert.notNull(list);
-        String propName = LambdaUtil.getFieldName(func);
+        String propName = ReflectUtils.getFieldName(func);
         String join = list.stream().map(String::valueOf).collect(Collectors.joining(StringPool.COMMA));
         this.conditionFast.queryConditionIn(propName, join);
         return this;
@@ -60,14 +62,14 @@ public class QueryConditionFastLambda<M extends BaseModel> {
     /**
      * 查询条件新增 lambda
      *
-     * @param func1
+     * @param func
      * @param value
      * @return
      */
-    public QueryConditionFastLambda<M> queryCondition(Func1<M, Object> func1, String value) {
-        Assert.notNull(func1);
+    public QueryConditionFastLambda<M> queryCondition(Function<M, Object> func, String value) {
+        Assert.notNull(func);
         Assert.notNull(value);
-        String fieldName = LambdaUtil.getFieldName(func1);
+        String fieldName = ReflectUtils.getFieldName(func);
         this.conditionFast.queryCondition(fieldName, value);
         return this;
     }
@@ -79,7 +81,7 @@ public class QueryConditionFastLambda<M extends BaseModel> {
      * @param conditionEnum
      * @return
      */
-    public QueryConditionFastLambda<M> queryCondition(Func1<M, Object> func, ConditionEnum conditionEnum) {
+    public QueryConditionFastLambda<M> queryCondition(Function<M, Object> func, ConditionEnum conditionEnum) {
         Assert.notNull(func);
         Assert.notNull(conditionEnum);
         this.queryCondition(func, conditionEnum.name());
@@ -89,14 +91,14 @@ public class QueryConditionFastLambda<M extends BaseModel> {
     /**
      * 排序条件新增 lambda
      *
-     * @param func1
+     * @param func
      * @param value
      * @return
      */
-    public QueryConditionFastLambda<M> sortCondition(Func1<M, Object> func1, Boolean value) {
-        Assert.notNull(func1);
+    public QueryConditionFastLambda<M> sortCondition(Function<M, Object> func, Boolean value) {
+        Assert.notNull(func);
         Assert.notNull(value);
-        String fieldName = LambdaUtil.getFieldName(func1);
+        String fieldName = ReflectUtils.getFieldName(func);
         this.conditionFast.sortCondition(fieldName, value);
         return this;
     }
@@ -108,4 +110,5 @@ public class QueryConditionFastLambda<M extends BaseModel> {
     private void setConditionFast(QueryConditionFast<M> conditionFast) {
         this.conditionFast = conditionFast;
     }
+
 }

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static com.github.dozermapper.core.loader.api.TypeMappingOptions.mapEmptyString;
 import static com.github.dozermapper.core.loader.api.TypeMappingOptions.mapNull;
@@ -20,10 +22,15 @@ import static com.github.dozermapper.core.loader.api.TypeMappingOptions.mapNull;
  */
 public class MapperUtil {
 
-    protected static Mapper mapper;
+    private static final Mapper DEFAULT_MAPPER;
+    
+    /**
+     * 缓存不同配置的Mapper实例
+     */
+    private static final ConcurrentMap<String, Mapper> MAPPER_CACHE = new ConcurrentHashMap<>();
 
     static {
-        mapper = DozerBeanMapperBuilder.buildDefault();
+        DEFAULT_MAPPER = DozerBeanMapperBuilder.buildDefault();
     }
 
     private MapperUtil() {
@@ -41,7 +48,7 @@ public class MapperUtil {
         if (s == null) {
             return null;
         }
-        return mapper.map(s, clz);
+        return DEFAULT_MAPPER.map(s, clz);
     }
 
 
@@ -59,7 +66,7 @@ public class MapperUtil {
         }
         List<T> list = new ArrayList<T>();
         for (S vs : s) {
-            list.add(mapper.map(vs, clz));
+            list.add(DEFAULT_MAPPER.map(vs, clz));
         }
         return list;
     }
@@ -78,7 +85,7 @@ public class MapperUtil {
         }
         Set<T> set = new HashSet<T>();
         for (S vs : s) {
-            set.add(mapper.map(vs, clz));
+            set.add(DEFAULT_MAPPER.map(vs, clz));
         }
         return set;
     }
@@ -98,7 +105,7 @@ public class MapperUtil {
         @SuppressWarnings("unchecked")
         T[] arr = (T[]) Array.newInstance(clz, s.length);
         for (int i = 0; i < s.length; i++) {
-            arr[i] = mapper.map(s[i], clz);
+            arr[i] = DEFAULT_MAPPER.map(s[i], clz);
         }
         return arr;
     }
@@ -110,13 +117,16 @@ public class MapperUtil {
      * @param target 指向源
      */
     public static void convertIgnoreNullAndBlank(Object source, Object target) {
-        DozerBeanMapperBuilder dozerBeanMapperBuilder = DozerBeanMapperBuilder.create();
-        Mapper mapper = dozerBeanMapperBuilder.withMappingBuilders(new BeanMappingBuilder() {
-            @Override
-            protected void configure() {
-                mapping(source.getClass(), target.getClass(), mapNull(false), mapEmptyString(false));
-            }
-        }).build();
+        String key = source.getClass().getName() + "->" + target.getClass().getName() + ":nonullblank";
+        Mapper mapper = MAPPER_CACHE.computeIfAbsent(key, k -> {
+            DozerBeanMapperBuilder dozerBeanMapperBuilder = DozerBeanMapperBuilder.create();
+            return dozerBeanMapperBuilder.withMappingBuilders(new BeanMappingBuilder() {
+                @Override
+                protected void configure() {
+                    mapping(source.getClass(), target.getClass(), mapNull(false), mapEmptyString(false));
+                }
+            }).build();
+        });
         mapper.map(source, target);
     }
 
@@ -127,13 +137,16 @@ public class MapperUtil {
      * @param target 指向源
      */
     public static void convertIgnoreNull(Object source, Object target) {
-        DozerBeanMapperBuilder dozerBeanMapperBuilder = DozerBeanMapperBuilder.create();
-        Mapper mapper = dozerBeanMapperBuilder.withMappingBuilders(new BeanMappingBuilder() {
-            @Override
-            protected void configure() {
-                mapping(source.getClass(), target.getClass(), mapNull(false));
-            }
-        }).build();
+        String key = source.getClass().getName() + "->" + target.getClass().getName() + ":nonull";
+        Mapper mapper = MAPPER_CACHE.computeIfAbsent(key, k -> {
+            DozerBeanMapperBuilder dozerBeanMapperBuilder = DozerBeanMapperBuilder.create();
+            return dozerBeanMapperBuilder.withMappingBuilders(new BeanMappingBuilder() {
+                @Override
+                protected void configure() {
+                    mapping(source.getClass(), target.getClass(), mapNull(false));
+                }
+            }).build();
+        });
         mapper.map(source, target);
     }
 

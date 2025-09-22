@@ -7,8 +7,10 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.*;
 import java.util.Date;
+import java.util.function.Function;
 
 /**
  * 反射工具类. 提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
@@ -321,4 +323,35 @@ public class ReflectUtils {
         }
         return new RuntimeException(msg, e);
     }
+
+
+    /**
+     * 获取字段名
+     *
+     * @param func
+     * @param <M>
+     * @return
+     */
+    public static <M> String getFieldName(Function<M, Object> func) {
+        try {
+            // 通过反射获取 SerializedLambda
+            Method writeReplace = func.getClass().getDeclaredMethod("writeReplace");
+            writeReplace.setAccessible(true);
+            SerializedLambda lambda = (SerializedLambda) writeReplace.invoke(func);
+
+            // 从方法名推导字段名
+            String methodName = lambda.getImplMethodName();
+            if (methodName.startsWith("get")) {
+                String fieldName = methodName.substring(3);
+                return Character.toLowerCase(fieldName.charAt(0)) + fieldName.substring(1);
+            } else if (methodName.startsWith("is")) {
+                String fieldName = methodName.substring(2);
+                return Character.toLowerCase(fieldName.charAt(0)) + fieldName.substring(1);
+            }
+            return methodName;
+        } catch (Exception e) {
+            throw new RuntimeException("无法从 lambda 表达式提取字段名: " + func, e);
+        }
+    }
+
 }

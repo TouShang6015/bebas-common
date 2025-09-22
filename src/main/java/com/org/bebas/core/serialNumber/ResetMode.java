@@ -1,8 +1,7 @@
 package com.org.bebas.core.serialNumber;
 
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
 import lombok.Getter;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.util.Date;
 
@@ -15,7 +14,7 @@ public enum ResetMode {
     // 永不重置
     NEVER("", 0),
     // 按天重置（保留90天）
-    DAILY(DatePattern.PURE_DATE_FORMAT.getPattern(), 90),
+    DAILY("yyyyMMdd", 90),
     // 按周重置
     WEEKLY("yyyyww", 30),
     // 按月重置
@@ -34,6 +33,6 @@ public enum ResetMode {
     }
 
     public String getDateSuffix() {
-        return "never".equals(datePattern) ? "permanent" : DateUtil.format(new Date(), datePattern);
+        return "never".equals(datePattern) ? "permanent" : DateFormatUtils.format(new Date(), datePattern);
     }
 }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * 客户端工具类
@@ -63,14 +64,14 @@ public class ServletUtils {
      * 获取request
      */
     public static HttpServletRequest getRequest() {
-        return getRequestAttributes().getRequest();
+        return Objects.requireNonNull(getRequestAttributes(), "RequestContextHolder中的request为空").getRequest();
     }
 
     /**
      * 获取response
      */
     public static HttpServletResponse getResponse() {
-        return getRequestAttributes().getResponse();
+        return Objects.requireNonNull(getRequestAttributes(), "RequestContextHolder中的response为空").getResponse();
     }
 
     /**
@@ -92,7 +93,7 @@ public class ServletUtils {
      * @param string   待渲染的字符串
      */
     public static void renderString(HttpServletResponse response, String string) {
-        renderString(response,200,string);
+        renderString(response, 200, string);
     }
 
     /**
@@ -108,7 +109,7 @@ public class ServletUtils {
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("向客户端渲染字符串时发生错误", e);
         }
     }
 
@@ -139,17 +140,17 @@ public class ServletUtils {
 
     /**
      * 异常重定向ErrorController
+     *
      * @param request
      * @param response
      * @param message
      */
-    public static void redirectErrorRequest(HttpServletRequest request,HttpServletResponse response,String message) {
+    public static void redirectErrorRequest(HttpServletRequest request, HttpServletResponse response, String message) {
         try {
             request.setAttribute("error.message", message);
             request.getRequestDispatcher("/error/print").forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException("重定向到错误页面时发生错误", e);
         }
     }
 

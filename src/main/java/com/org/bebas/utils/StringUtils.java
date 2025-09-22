@@ -1,15 +1,14 @@
 package com.org.bebas.utils;
 
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.text.StrFormatter;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.org.bebas.constants.Constants;
 import com.org.bebas.exception.GlobalException;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +26,11 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * 下划线
      */
     private static final char SEPARATOR = '_';
+    
+    /**
+     * 驼峰命名法正则表达式
+     */
+    private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("[A-Z]");
 
     /**
      * 获取参数不为空值
@@ -353,7 +357,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             return "";
         } else if (!name.contains("_")) {
             // 不含下划线，仅将首字母大写
-            return name.substring(0, 1).toUpperCase() + name.substring(1);
+            return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
         }
         // 用下划线将原始字符串分割
         String[] camels = name.split("_");
@@ -481,12 +485,12 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return
      */
     public static String replace(String content, String symbol, List<?> params) {
-        if (StrUtil.isEmpty(content))
+        if (isEmpty(content))
             throw new GlobalException(String.format(" exception basecommon class:%s ,method:%s ,content:%s", StringUtils.class.getName(), "replace", "文本内容为空！"));
-        if (StrUtil.isEmpty(symbol))
+        if (isEmpty(symbol))
             throw new GlobalException(String.format(" exception basecommon class:%s ,method:%s ,content:%s", StringUtils.class.getName(), "replace", "占位符为空！"));
-        for (int i = 0; i < content.split(symbol).length; i++) {
-            content = content.replaceFirst(symbol, String.valueOf(params.get(i)));
+        for (int i = 0; i < content.split(Pattern.quote(symbol)).length && i < params.size(); i++) {
+            content = content.replaceFirst(Pattern.quote(symbol), String.valueOf(params.get(i)));
         }
         return content;
     }
@@ -508,7 +512,11 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         if (isEmpty(params) || isEmpty(template)) {
             return template;
         }
-        return StrFormatter.format(template, params);
+        String result = template;
+        for (Object param : params) {
+            result = result.replaceFirst("\\{\\}", param == null ? "null" : param.toString());
+        }
+        return result;
     }
 
     /**
@@ -517,35 +525,37 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @param link 链接
      * @return 结果
      */
-    public static boolean ishttp(String link)
-    {
+    public static boolean ishttp(String link) {
         return StringUtils.startsWithAny(link, Constants.HTTP, Constants.HTTPS);
     }
 
     /**
      * 将字符串根据{R}分隔为集合
+     *
      * @param v
      * @param rFunction
      * @param <R>
      * @return
      */
-    public static <R> List<R> splitToList(String v, Function<String,R> rFunction){
-        return splitToList(v,rFunction,StringPool.COMMA);
+    public static <R> List<R> splitToList(String v, Function<String, R> rFunction) {
+        return splitToList(v, rFunction, StringPool.COMMA);
     }
 
     /**
      * 将字符串根据{R}分隔为集合
+     *
      * @param v
      * @param rFunction
      * @param _splitValue
      * @param <R>
      * @return
      */
-    public static <R> List<R> splitToList(String v,Function<String,R> rFunction,String _splitValue){
-        Assert.notNull(v);
-        Assert.notNull(rFunction);
-        Assert.notNull(_splitValue);
-        return Arrays.stream(v.split(_splitValue)).map(rFunction).collect(Collectors.toList());
+    public static <R> List<R> splitToList(String v, Function<String, R> rFunction, String _splitValue) {
+        if (v == null || v.isEmpty()) {
+            return new ArrayList<>();
+        }
+        Assert.notNull(rFunction, "转换函数不能为空");
+        Assert.notNull(_splitValue, "分隔符不能为空");
+        return Arrays.stream(v.split(Pattern.quote(_splitValue))).map(rFunction).collect(Collectors.toList());
     }
-
 }

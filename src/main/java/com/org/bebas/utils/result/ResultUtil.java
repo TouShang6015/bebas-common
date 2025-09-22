@@ -1,8 +1,9 @@
 package com.org.bebas.utils.result;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.org.bebas.constants.HttpStatus;
+
+import java.util.Objects;
 
 /**
  * @author WuHao
@@ -17,7 +18,7 @@ public class ResultUtil {
      * @return
      */
     public static boolean verifySuccess(Result result) {
-        if (ObjectUtil.isNull(result))
+        if (Objects.isNull(result))
             return false;
         return result.getCode() == HttpStatus.SUCCESS;
     }
@@ -30,9 +31,9 @@ public class ResultUtil {
      * @return
      */
     public static <R> R getData(Result result) {
-        if (ObjectUtil.isNull(result))
+        if (Objects.isNull(result))
             return null;
-        if (ObjectUtil.isNull(result.getData()))
+        if (Objects.isNull(result.getData()))
             return null;
         return (R) result.getData();
     }
@@ -46,9 +47,9 @@ public class ResultUtil {
      * @return
      */
     public static <R> R getData(Result result, Class<R> cls) {
-        if (ObjectUtil.isNull(result))
+        if (Objects.isNull(result))
             return null;
-        if (ObjectUtil.isNull(result.getData()))
+        if (Objects.isNull(result.getData()))
             return null;
         return JSON.parseObject(JSON.toJSONString(result.getData()), cls);
     }

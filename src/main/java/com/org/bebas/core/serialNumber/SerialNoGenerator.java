@@ -1,8 +1,7 @@
 package com.org.bebas.core.serialNumber;
 
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.StrUtil;
 import com.org.bebas.core.redis.RedisUtil;
+import com.org.bebas.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +41,10 @@ public class SerialNoGenerator {
      * @return 完整流水号
      */
     public String generate(String businessKey, SerialNoRule rule) {
-        Assert.notBlank(businessKey, "业务键不能为空");
+        if (StringUtils.isEmpty(businessKey)) {
+            throw new IllegalArgumentException("业务键不能为空");
+        }
+
         // 获取或创建规则（带缓存）
         SerialNoRule effectiveRule = ruleCache.computeIfAbsent(
                 businessKey,
@@ -55,7 +57,7 @@ public class SerialNoGenerator {
         String sequence = generateSequence(businessKey, effectiveRule);
 
         // 组合完整流水号
-        return StrUtil.format(
+        return StringUtils.format(
                 effectiveRule.getTemplate(),
                 prefix, datePart, sequence
         );
@@ -85,7 +87,7 @@ public class SerialNoGenerator {
      */
     private String buildRedisKey(String businessKey, SerialNoRule rule) {
         String datePart = rule.getResetMode().getDateSuffix();
-        return StrUtil.format("serial:{}:{}:{}",
+        return StringUtils.format("serial:{}:{}:{}",
                 rule.getSystemTag(), businessKey, datePart);
     }
 
@@ -109,15 +111,31 @@ public class SerialNoGenerator {
             return rawSequence;
         }
 
-        String padding = StrUtil.repeat(rule.getPadChar(), padSize);
+        String padding = repeat(rule.getPadChar(), padSize);
         return rule.getPadMode() == PadMode.LEFT
                 ? padding + rawSequence
                 : rawSequence + padding;
     }
 
+    /**
+     * 重复字符指定次数
+     *
+     * @param c     要重复的字符
+     * @param count 重复次数
+     * @return 重复后的字符串
+     */
+    private String repeat(char c, int count) {
+        if (count <= 0) {
+            return "";
+        }
+        char[] chars = new char[count];
+        for (int i = 0; i < count; i++) {
+            chars[i] = c;
+        }
+        return new String(chars);
+    }
+
     private boolean useRedis(SerialNoRule rule) {
         return rule.isRedisEnabled() && redisUtil != null;
     }
-
-
 }

@@ -1,16 +1,15 @@
 package com.org.bebas.core.jackson;
 
-import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.org.bebas.core.jackson.customSeria.NullValueSerializer;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -32,7 +31,9 @@ public abstract class AbstractJSONUtil<B> {
             //忽略空Bean转json的错误
             objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             //所有的日期格式都统一为以下的样式，即yyyy-MM-dd HH:mm:ss
-            objectMapper.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
+//            objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             //忽略 在json字符串中存在，但是在java对象中不存在对应属性的情况。防止错误
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         });

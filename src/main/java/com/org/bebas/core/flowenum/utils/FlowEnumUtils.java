@@ -1,11 +1,10 @@
 package com.org.bebas.core.flowenum.utils;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.StrUtil;
 import com.org.bebas.core.flowenum.base.FlowBaseEnum;
 import com.org.bebas.core.label.LabelOption;
 import com.org.bebas.exception.BusinessException;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,10 +86,10 @@ public class FlowEnumUtils {
      * @return
      */
     public static <T extends FlowBaseEnum> Map<String, Boolean> getMapByKeys(String keys, Class<T> cls) {
-        if (StrUtil.isEmpty(keys)) {
+        if (StringUtils.isEmpty(keys)) {
             return new HashMap<>();
         }
-        List<T> selectList = CollUtil.newArrayList();
+        List<T> selectList = new ArrayList<>(Collections.emptyList());
         for (String key : keys.split(",")) {
             selectList.add(FlowEnumUtils.getEnumByKey(key, cls));
         }

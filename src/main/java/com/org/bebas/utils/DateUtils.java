@@ -6,9 +6,11 @@ import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
-import static cn.hutool.core.date.DatePattern.*;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * 时间工具类
@@ -16,6 +18,25 @@ import static cn.hutool.core.date.DatePattern.*;
  * @author WuHao
  */
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
+
+    public static final String NORM_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String NORM_DATE_PATTERN = "yyyy-MM-dd";
+    public static final String PURE_DATETIME_PATTERN = "yyyyMMddHHmmss";
+    
+    /**
+     * 线程安全的日期格式化器缓存
+     */
+    private static final ConcurrentMap<String, DateTimeFormatter> FORMATTER_CACHE = new ConcurrentHashMap<>();
+    
+    /**
+     * 线程安全的SimpleDateFormat缓存
+     */
+    private static final ConcurrentMap<String, ThreadLocal<SimpleDateFormat>> DATE_FORMAT_CACHE = new ConcurrentHashMap<>();
+    
+    /**
+     * 标准日期时间格式化器
+     */
+    public static final DateTimeFormatter NORM_DATETIME_FORMATTER = DateTimeFormatter.ofPattern(NORM_DATETIME_PATTERN);
 
     public static String[] parsePatterns = {
             "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
@@ -34,7 +55,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 获取当前时间 输出字符串 默认 yyyy-MM-dd HH:mm:ss
      *
-     * @return
+     * @return 当前时间字符串
      */
     public static String nowDateFormat() {
         return LocalDateTime.now()
@@ -68,12 +89,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
 
     public static String parseDateToStr(final String format, final Date date) {
-        return new SimpleDateFormat(format).format(date);
+        return getDateFormat(format).format(date);
     }
 
     public static Date dateTime(final String format, final String ts) {
         try {
-            return new SimpleDateFormat(format).parse(ts);
+            return getDateFormat(format).parse(ts);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -149,6 +170,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * 增加 LocalDateTime ==> Date
      */
     public static Date toDate(LocalDateTime temporalAccessor) {
+        Objects.requireNonNull(temporalAccessor, "temporalAccessor cannot be null");
         ZonedDateTime zdt = temporalAccessor.atZone(ZoneId.systemDefault());
         return Date.from(zdt.toInstant());
     }
@@ -157,8 +179,28 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * 增加 LocalDate ==> Date
      */
     public static Date toDate(LocalDate temporalAccessor) {
+        Objects.requireNonNull(temporalAccessor, "temporalAccessor cannot be null");
         LocalDateTime localDateTime = LocalDateTime.of(temporalAccessor, LocalTime.of(0, 0, 0));
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
         return Date.from(zdt.toInstant());
+    }
+    
+    /**
+     * 获取线程安全的DateTimeFormatter
+     * @param pattern 日期格式
+     * @return DateTimeFormatter实例
+     */
+    public static DateTimeFormatter getDateTimeFormatter(String pattern) {
+        return FORMATTER_CACHE.computeIfAbsent(pattern, DateTimeFormatter::ofPattern);
+    }
+    
+    /**
+     * 获取线程安全的SimpleDateFormat
+     * @param pattern 日期格式
+     * @return SimpleDateFormat实例
+     */
+    public static SimpleDateFormat getDateFormat(String pattern) {
+        return DATE_FORMAT_CACHE.computeIfAbsent(pattern, 
+            p -> ThreadLocal.withInitial(() -> new SimpleDateFormat(p))).get();
     }
 }

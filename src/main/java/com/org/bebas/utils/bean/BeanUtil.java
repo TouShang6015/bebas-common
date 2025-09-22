@@ -1,23 +1,23 @@
 package com.org.bebas.utils.bean;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.filter.ValueFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author WuHao
  * @since 2022/5/17 23:23
  */
-public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
+public class BeanUtil extends BeanUtils {
 
     /**
      * 将bean中的空字符串转换为null
@@ -27,12 +27,12 @@ public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
      * @return
      */
     public static <M> M emptyToNull(M m) {
-        if (ObjectUtil.isNull(m))
+        if (Objects.isNull(m))
             return null;
         return (M) JSON.parseObject(
                 JSON.toJSONString(m, (ValueFilter) (obj, name, value) -> {
                     if (value instanceof String) {
-                        if (StrUtil.isEmpty((CharSequence) value)) return null;
+                        if (StringUtils.isEmpty((CharSequence) value)) return null;
                     }
                     return value;
                 }),
@@ -48,7 +48,7 @@ public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
      * @return
      */
     public static <M> M nullToEmptyDefault(M m) {
-        if (ObjectUtil.isNull(m))
+        if (Objects.isNull(m))
             return null;
         return (M) JSON.parseObject(
                 JSON.toJSONString(m
@@ -70,7 +70,7 @@ public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
     public static <M> Object valueByPropertyName(M m, String propertyName) {
         AtomicReference<Object> temp = new AtomicReference<>(new Object());
         JSON.toJSONString(m, (ValueFilter) (obj, name, val) -> {
-            if (StrUtil.isNotEmpty(name) && name.equals(propertyName)) {
+            if (StringUtils.isNotBlank(name) && name.equals(propertyName)) {
                 temp.set(val);
             }
             return null;
