@@ -96,4 +96,34 @@ public class BeanUtil extends BeanUtils {
                         HashMap::putAll);
     }
 
+    /**
+     * 复制非null属性
+     *
+     * @param source 源对象
+     * @param target 目标对象
+     */
+    private static <Source, Target> void copyPropertiesIgnoreNull(Source source, Target target) {
+        if (source == null || target == null) {
+            return;
+        }
+
+        // 使用反射方式复制非null属性
+        Class<?> clazz = source.getClass();
+        while (clazz != null) {
+            java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+            for (java.lang.reflect.Field field : fields) {
+                try {
+                    field.setAccessible(true);
+                    Object value = field.get(source);
+                    // 复制非null值
+                    if (value != null) {
+                        field.set(target, value);
+                    }
+                } catch (IllegalAccessException e) {
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+    }
+
 }

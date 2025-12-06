@@ -3,14 +3,15 @@
   <groupId>org.bebas</groupId>
   <artifactId>org-bebas-common</artifactId>
   <versioning>
-    <release>1.1.0-snapshot</release>
+    <release>1.1.1-snapshot</release>
     <versions>
       <version>1.0.3</version>
       <version>1.0.4-snapshots</version>
       <version>1.0.4</version>
       <version>1.0.4-snapshot</version>
       <version>1.1.0-snapshot</version>
+      <version>1.1.1-snapshot</version>
     </versions>
-    <lastUpdated>20250922090710</lastUpdated>
+    <lastUpdated>20251206084044</lastUpdated>
   </versioning>
 </metadata>

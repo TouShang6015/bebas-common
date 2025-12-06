@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * spring工具类
+ *
  * @author WuHao
  */
 @Component
@@ -135,11 +136,12 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
 
     /**
      * 从上下文中获取类注解的字节码文件
+     *
      * @param typeClass
      * @return
      * @throws ClassNotFoundException
      */
-    public static Map<Object,Class<?>> getContextAnnotationClassByType(Class<? extends Annotation> typeClass) throws ClassNotFoundException {
+    public static Map<Object, Class<?>> getContextAnnotationClassByType(Class<? extends Annotation> typeClass) throws ClassNotFoundException {
         Map<String, Object> beanMap = applicationContext.getBeansWithAnnotation(typeClass);
         HashMap<Object, Class<?>> resultMap = new HashMap<>();
         for (String beanName : beanMap.keySet()) {
@@ -151,9 +153,13 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
                 name = name.split("\\$\\$")[0];
                 aClass = Class.forName(name);
             }
-            resultMap.put(o,aClass);
+            resultMap.put(o, aClass);
         }
         return resultMap;
+    }
+
+    public static <T> Map<String, T> getBeansOfType(Class<T> type) {
+        return applicationContext.getBeansOfType(type);
     }
 
 }

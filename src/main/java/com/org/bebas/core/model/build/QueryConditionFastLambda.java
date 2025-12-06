@@ -1,13 +1,13 @@
 package com.org.bebas.core.model.build;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.org.bebas.core.function.FunctionSerializable;
 import com.org.bebas.core.model.BaseModel;
 import com.org.bebas.enums.ConditionEnum;
 import com.org.bebas.utils.bean.ReflectUtils;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +40,7 @@ public class QueryConditionFastLambda<M extends BaseModel> {
      * @param func
      * @param value
      */
-    public QueryConditionFastLambda<M> queryConditionIn(Function<M, Object> func, String value) {
+    public QueryConditionFastLambda<M> queryConditionIn(FunctionSerializable<M, Object> func, String value) {
         Assert.notNull(func, "func不能为空");
         Assert.notNull(value, "value不能为空");
 
@@ -50,7 +50,7 @@ public class QueryConditionFastLambda<M extends BaseModel> {
         return this;
     }
 
-    public QueryConditionFastLambda<M> queryConditionIn(Function<M, Object> func, Collection<?> list) {
+    public QueryConditionFastLambda<M> queryConditionIn(FunctionSerializable<M, Object> func, Collection<?> list) {
         Assert.notNull(func);
         Assert.notNull(list);
         String propName = ReflectUtils.getFieldName(func);
@@ -66,7 +66,7 @@ public class QueryConditionFastLambda<M extends BaseModel> {
      * @param value
      * @return
      */
-    public QueryConditionFastLambda<M> queryCondition(Function<M, Object> func, String value) {
+    public QueryConditionFastLambda<M> queryCondition(FunctionSerializable<M, Object> func, String value) {
         Assert.notNull(func);
         Assert.notNull(value);
         String fieldName = ReflectUtils.getFieldName(func);
@@ -81,7 +81,7 @@ public class QueryConditionFastLambda<M extends BaseModel> {
      * @param conditionEnum
      * @return
      */
-    public QueryConditionFastLambda<M> queryCondition(Function<M, Object> func, ConditionEnum conditionEnum) {
+    public QueryConditionFastLambda<M> queryCondition(FunctionSerializable<M, Object> func, ConditionEnum conditionEnum) {
         Assert.notNull(func);
         Assert.notNull(conditionEnum);
         this.queryCondition(func, conditionEnum.name());
@@ -95,7 +95,7 @@ public class QueryConditionFastLambda<M extends BaseModel> {
      * @param value
      * @return
      */
-    public QueryConditionFastLambda<M> sortCondition(Function<M, Object> func, Boolean value) {
+    public QueryConditionFastLambda<M> sortCondition(FunctionSerializable<M, Object> func, Boolean value) {
         Assert.notNull(func);
         Assert.notNull(value);
         String fieldName = ReflectUtils.getFieldName(func);

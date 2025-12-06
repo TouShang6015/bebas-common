@@ -350,6 +350,7 @@ public class ReflectUtils {
             }
             return methodName;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("无法从 lambda 表达式提取字段名: " + func, e);
         }
     }
