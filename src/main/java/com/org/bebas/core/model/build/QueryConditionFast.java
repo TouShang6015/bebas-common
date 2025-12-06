@@ -43,7 +43,7 @@ public class QueryConditionFast<M extends BaseModel> {
      * @param value
      */
     public QueryConditionFast<M> queryConditionIn(String propName, String value) {
-        Field propField = FieldUtils.getDeclaredField(model.getClass(), propName);
+        Field propField = FieldUtils.getDeclaredField(model.getClass(), propName,true);
         Assert.notNull(propField);
         if (StringUtils.isEmpty(propName)) {
             return this;
