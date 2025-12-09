@@ -1,5 +1,6 @@
 package com.org.bebas.utils.bean;
 
+import com.org.bebas.core.function.FunctionSerializable;
 import com.org.bebas.utils.DateUtils;
 import com.org.bebas.utils.text.Convert;
 import org.apache.commons.lang3.StringUtils;
@@ -332,7 +333,7 @@ public class ReflectUtils {
      * @param <M>
      * @return
      */
-    public static <M> String getFieldName(Function<M, Object> func) {
+    public static <M> String getFieldName(FunctionSerializable<M, Object> func) {
         try {
             // 通过反射获取 SerializedLambda
             Method writeReplace = func.getClass().getDeclaredMethod("writeReplace");

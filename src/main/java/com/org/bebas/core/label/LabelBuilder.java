@@ -1,18 +1,18 @@
 package com.org.bebas.core.label;
 
+import com.org.bebas.core.function.FunctionSerializable;
 import com.org.bebas.utils.bean.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * @author WuHao
  * @description:
- * @since 2023/4/11 8:34
  * @Version 1.0
+ * @since 2023/4/11 8:34
  */
 @Slf4j
 public class LabelBuilder<T> {
@@ -30,7 +30,7 @@ public class LabelBuilder<T> {
         return builder;
     }
 
-    public LabelBuilder<T> select(Function<T, Object> labelFunc, Function<T, Object> valueFunc) {
+    public LabelBuilder<T> select(FunctionSerializable<T, Object> labelFunc, FunctionSerializable<T, Object> valueFunc) {
         if (Objects.isNull(labelFunc)) {
             throw new IllegalArgumentException("labelFunc不能为空");
         }
